@@ -18,9 +18,3 @@ Welcome to the **AI Question Generator** project! 🚀 This web application leve
 - **NLTK**: For text processing and stopword removal.
 - **PyPDF2**: For extracting text from PDF files.
 - **Bootstrap**: For responsive and stylish frontend design.
-
-## Setup Instructions ⚙️
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/yourusername/AI-Question-Generator.git
