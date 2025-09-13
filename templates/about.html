@@ -4,108 +4,682 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - AI Question Generator</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='web_icon.png') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
         }
 
+        /* Dark Neon Theme Background */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, #ff0080 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, #00ffff 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, #ffff00 0%, transparent 50%),
+                #0a0a0a;
+            opacity: 0.1;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header */
         .header {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: #fff;
-            padding: 20px 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid #333;
+            backdrop-filter: blur(10px);
         }
 
-        .header h1 {
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .container {
-            margin-top: 30px;
-            flex: 1;
-            padding-bottom: 70px;
-        }
-
-        .footer {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: #fff;
-            text-align: center;
-            padding: 15px 0;
-            position: relative;
-            margin-top: auto;
-        }
-
-        .footer a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        .about-content {
-            max-width: 800px;
+        .nav-container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 1rem 2rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-center {
+            justify-self: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .nav-links a.active {
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        /* Social Media Header Section */
+        .social-header {
+            justify-self: end;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            color: #888;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .social-link:hover {
+            color: #fff;
+            border-color: transparent;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+        }
+
+        .social-link:hover::before {
+            opacity: 1;
+        }
+
+        .social-link i {
+            font-size: 1rem;
+            z-index: 1;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff0080, #00ffff, #ffff00);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+
+        .creator-info {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .creator-info a {
+            color: #ff0080;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .creator-info a:hover {
+            color: #ff3399;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+        }
+
+        /* About Content */
+        .about-content {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .about-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0080, #00ffff, #ffff00, #ff0080);
+            background-size: 200% 100%;
+            animation: borderFlow 2s linear infinite;
+        }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
         }
 
         .about-content h2 {
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
         .about-content p {
-            font-size: 18px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .about-content ul {
+            list-style: none;
+            margin: 2rem 0;
+            padding: 0;
+        }
+
+        .about-content li {
+            position: relative;
+            padding: 0.8rem 0 0.8rem 2rem;
+            color: #ccc;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #222;
+            transition: all 0.3s ease;
+        }
+
+        .about-content li:hover {
+            color: #00ffff;
+            padding-left: 2.5rem;
+        }
+
+        .about-content li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #00ffff;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .about-content li:hover::before {
+            color: #ff0080;
+            transform: scale(1.2);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            border-color: #00ffff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #00ffff;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #aaa;
             line-height: 1.6;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .tech-stack h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #00ffff;
+            margin-bottom: 2rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .tech-tag {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #333;
+            border-radius: 25px;
+            padding: 0.8rem 1.5rem;
+            color: #fff;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 128, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tech-tag:hover::before {
+            left: 100%;
+        }
+
+        .tech-tag:hover {
+            border-color: #ff0080;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 128, 0.3);
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: linear-gradient(135deg, #111, #1a1a1a);
+            border-top: 1px solid #333;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0080, #00ffff, #ffff00, #ff0080);
+            background-size: 200% 100%;
+            animation: borderFlow 3s linear infinite;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-creator {
+            margin-bottom: 2rem;
+        }
+
+        .footer-creator h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-creator p {
+            color: #888;
+            font-size: 1rem;
+        }
+
+        .footer-creator a {
+            color: #ff0080;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .footer-creator a:hover {
+            color: #ff3399;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+        }
+
+        /* Footer Social Media */
+        .footer-social {
+            margin-bottom: 2rem;
+        }
+
+        .footer-social h4 {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 2px solid #333;
+            border-radius: 50%;
+            color: #888;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .footer-social-link:hover {
+            transform: scale(1.2) rotate(10deg);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .footer-social-link:hover::before {
+            opacity: 1;
+        }
+
+        .footer-social-link i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-copyright {
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+        }
+
+        .footer-copyright a {
+            color: #00ffff;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-copyright a:hover {
+            color: #33ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-container {
+                grid-template-columns: auto 1fr;
+                gap: 1rem;
+            }
+
+            .social-header {
+                justify-self: end;
+            }
+            
+            .nav-center {
+                justify-self: center;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 2rem 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .about-content {
+                padding: 2rem;
+            }
+
+            .nav-container {
+                grid-template-columns: auto auto;
+                gap: 1rem;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .footer-social-links {
+                gap: 1rem;
+            }
+
+            .footer-social-link {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Background Effects -->
+    <div class="bg-container"></div>
+    <div class="grid-overlay"></div>
+
     <!-- Header -->
     <header class="header">
-        <div class="container">
-            <h1>AI Question Generator</h1>
-            <nav>
-                <a href="\home" class="text-light me-3">Home</a>
-                <a href="\About" class="text-light me-3">About</a>
-                <a href="\help" class="text-light">Help</a>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-brain"></i>
+                QuestionForge
+            </a>
+            <nav class="nav-center">
+                <ul class="nav-links">
+                    <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/About" class="active"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="/help"><i class="fas fa-question-circle"></i> Help</a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
-    <!-- About Section -->
-    <div class="container">
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1 class="hero-title">About</h1>
+            <p class="hero-subtitle">Discover the power of AI-driven question generation</p>
+            <p class="creator-info">Built with innovation by <a href="https://www.linkedin.com/in/jaineel-purani-9a128120b/">Jaineel Purani</a></p>
+        </div>
+
+        <!-- About Content -->
         <div class="about-content">
-            <h2>About AI Question Generator</h2>
+            <h2>AI Question Generator</h2>
             <p>
                 The AI Question Generator is a cutting-edge web tool powered by advanced Natural Language Processing (NLP) algorithms. Its primary purpose is to help educators, students, and content creators generate relevant questions from a given text. Whether you're working with educational material, articles, or other text sources, this tool will assist in creating insightful and contextually accurate questions.
             </p>
             <p>
-                The system utilizes pre-trained models like T5, GPT-3, and other NLP techniques to comprehend the provided text and generate meaningful questions. You can input the text directly or upload documents (.txt, .pdf), and the tool will generate questions based on the most important information within the text.
+                The system utilizes pre-trained models like T5, SpaCy, and other NLP techniques to comprehend the provided text and generate meaningful questions. You can input the text directly or upload documents (.txt, .pdf), and the tool will generate questions based on the most important information within the text.
             </p>
-            <p>
-                Key Features:
-            </p>
+            <p><strong>Key Features:</strong></p>
             <ul>
-                <li>Generate multiple types of questions from a given text.</li>
-                <li>Support for text input and file uploads (.txt, .pdf).</li>
-                <li>Uses powerful NLP models for accurate question generation.</li>
-                <li>Great for educational purposes, quiz creation, and study aids.</li>
+                <li>Generate multiple types of questions from any given text</li>
+                <li>Support for text input and file uploads (.txt, .pdf)</li>
+                <li>Uses powerful NLP models for accurate question generation</li>
+                <li>Perfect for educational purposes, quiz creation, and study aids</li>
+                <li>Advanced filtering for high-quality, relevant questions</li>
+                <li>Real-time processing with instant results</li>
             </ul>
             <p>
                 This tool is designed to simplify the process of creating study questions, quizzes, and assessments for anyone in need of automated question generation. The possibilities are endless—from creating exams and homework questions to enhancing learning through interactive content.
@@ -114,16 +688,79 @@
                 Whether you're a student looking to generate practice questions or a teacher designing assessments, the AI Question Generator is here to make your task easier and more efficient.
             </p>
         </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-brain feature-icon"></i>
+                <h3>AI Powered</h3>
+                <p>Advanced machine learning algorithms analyze your content to generate contextually accurate questions.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-file-upload feature-icon"></i>
+                <h3>Multiple Formats</h3>
+                <p>Support for text input and file uploads including PDF and TXT documents for maximum flexibility.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-filter feature-icon"></i>
+                <h3>Smart Filtering</h3>
+                <p>Intelligent filtering system ensures only high-quality, relevant questions are generated from your content.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-graduation-cap feature-icon"></i>
+                <h3>Educational Focus</h3>
+                <p>Specifically designed for educators, students, and content creators to enhance learning experiences.</p>
+            </div>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="tech-stack">
+            <h3>Built With Modern Technology</h3>
+            <div class="tech-tags">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">Flask</span>
+                <span class="tech-tag">Transformers</span>
+                <span class="tech-tag">T5 Model</span>
+                <span class="tech-tag">spaCy NLP</span>
+                <span class="tech-tag">NLTK</span>
+                <span class="tech-tag">PyTorch</span>
+                <span class="tech-tag">HTML5</span>
+                <span class="tech-tag">CSS3</span>
+                <span class="tech-tag">JavaScript</span>
+            </div>
+        </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Enhanced Footer -->
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 AI Question Generator. <a href="credits.html" class="text-light">Credits</a> | <a href="privacy.html" class="text-light">Privacy Policy</a> | <a href="feedback.html" class="text-light">Feedback</a></p>
+        <div class="footer-content">
+            <div class="footer-creator">
+                <h3>Carefully Crafted by Jaineel Purani</h3>
+                <p>AI Developer & Machine Learning Engineer passionate about creating innovative educational solutions.</p>
+            </div>
+
+            <div class="footer-social">
+                <h4>Connect With Me</h4>
+                <div class="footer-social-links">
+                    <a href="https://www.instagram.com/jaineel_purani__555/" target="_blank" class="footer-social-link instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/jaineel-purani-9a128120b/" target="_blank" class="footer-social-link linkedin">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/jaineelpurani" target="_blank" class="footer-social-link github">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-copyright">
+                <p>&copy; 2025 AI Question Generator. All rights reserved. 
+                <a href="/credits">Credits</a> | 
+                <a href="/privacy">Privacy Policy</a> | 
+                <a href="/feedback">Feedback</a></p>
+            </div>
         </div>
     </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
