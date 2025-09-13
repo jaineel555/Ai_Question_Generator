@@ -3,144 +3,930 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Question Generator - Help</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
+    <title>Help - AI Question Generator</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='web_icon.png') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
+        * {
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
         }
 
+        /* Dark Neon Theme Background */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, #ff0080 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, #00ffff 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, #ffff00 0%, transparent 50%),
+                #0a0a0a;
+            opacity: 0.1;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header */
         .header {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: #fff;
-            padding: 20px 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid #333;
+            backdrop-filter: blur(10px);
         }
 
-        .header h1 {
-            font-weight: 600;
-            margin: 0;
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 2rem;
         }
 
-        .container {
-            margin-top: 30px;
-            flex: 1;
-            padding-bottom: 70px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: 500;
-            transition: transform 0.2s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-        }
-
-        .footer {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            color: #fff;
-            text-align: center;
-            padding: 15px 0;
-            position: relative;
-            margin-top: auto;
-        }
-
-        .footer a {
-            color: #fff;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
             text-decoration: none;
-            margin: 0 10px;
         }
 
-        .footer a:hover {
-            text-decoration: underline;
+        .logo i {
+            font-size: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-center {
+            justify-self: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .nav-links a.active {
+            color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        /* Social Media Header Section */
+        .social-header {
+            justify-self: end;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            color: #888;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .social-link:hover {
+            color: #fff;
+            border-color: transparent;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+        }
+
+        .social-link:hover::before {
+            opacity: 1;
+        }
+
+        .social-link i {
+            font-size: 1rem;
+            z-index: 1;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff0080, #00ffff, #ffff00);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+
+        /* Help Sections */
+        .help-sections {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .help-section {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .help-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0080, #00ffff, #ffff00, #ff0080);
+            background-size: 200% 100%;
+            animation: borderFlow 2s linear infinite;
+        }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        .help-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            color: #00ffff;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #333;
         }
 
         .section-title {
-            font-weight: 600;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .help-item {
-            margin-bottom: 20px;
-        }
-
-        .help-item p {
+        .help-content p {
             font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .help-content ol,
+        .help-content ul {
+            margin: 1.5rem 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .help-content li {
+            position: relative;
+            padding: 1rem 0 1rem 3rem;
+            color: #ccc;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #222;
+            transition: all 0.3s ease;
+        }
+
+        .help-content li:hover {
+            color: #00ffff;
+            padding-left: 3.5rem;
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .help-content ol li::before {
+            content: counter(step-counter);
+            counter-increment: step-counter;
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            color: #000;
+            font-weight: 700;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .help-content ol {
+            counter-reset: step-counter;
+        }
+
+        .help-content ul li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            color: #00ffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .help-content ul li:hover::before {
+            color: #ff0080;
+            transform: scale(1.2);
+        }
+
+        /* Feature Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            border-color: #00ffff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* FAQ Section */
+        .faq-item {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(0, 255, 255, 0.05);
+            color: #00ffff;
+        }
+
+        .faq-question h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: linear-gradient(135deg, #111, #1a1a1a);
+            border-top: 1px solid #333;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0080, #00ffff, #ffff00, #ff0080);
+            background-size: 200% 100%;
+            animation: borderFlow 3s linear infinite;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-creator {
+            margin-bottom: 2rem;
+        }
+
+        .footer-creator h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-creator p {
+            color: #888;
+            font-size: 1rem;
+        }
+
+        .footer-creator a {
+            color: #ff0080;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .footer-creator a:hover {
+            color: #ff3399;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+        }
+
+        /* Footer Social Media */
+        .footer-social {
+            margin-bottom: 2rem;
+        }
+
+        .footer-social h4 {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 2px solid #333;
+            border-radius: 50%;
+            color: #888;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .footer-social-link:hover {
+            transform: scale(1.2) rotate(10deg);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .footer-social-link:hover::before {
+            opacity: 1;
+        }
+
+        .footer-social-link i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-copyright {
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: #00ffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #33ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .nav-container {
+                grid-template-columns: auto 1fr;
+                gap: 1rem;
+            }
+
+            .social-header {
+                justify-self: end;
+            }
+            
+            .nav-center {
+                justify-self: center;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 2rem 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .help-section {
+                padding: 2rem;
+            }
+
+            .nav-container {
+                grid-template-columns: auto auto;
+                gap: 1rem;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .footer-social-links {
+                gap: 1rem;
+            }
+
+            .footer-social-link {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Background Effects -->
+    <div class="bg-container"></div>
+    <div class="grid-overlay"></div>
+
     <!-- Header -->
     <header class="header">
-        <div class="container">
-            <h1>AI Question Generator - Generate questions from text or files</h1>
-            <h3>"Built and designed by <a href="https://www.instagram.com/jaineel_purani__555/?utm_source=ig_web_button_share_sheet" class="light_text" style="color:red";>Jaineel Purani</a>."</h3>
-            <nav>
-                <a href="\home" class="text-light me-3">Home</a>
-                <a href="\About" class="text-light me-3">About</a>
-                <a href="\help" class="text-light">Help</a>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-brain"></i>
+                QuestionForge
+            </a>
+            <nav class="nav-center">
+                <ul class="nav-links">
+                    <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="/help" class="active"><i class="fas fa-question-circle"></i> Help</a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="help-item">
-            <h2 class="section-title">How to Use the AI Question Generator?</h2>
-            <p>This tool helps you generate relevant questions based on a text input or a file that you upload. Follow the steps below to generate questions:</p>
-            <ol>
-                <li>Enter your text into the text box provided or upload a file containing text (like a .txt or .pdf file).</li>
-                <li>Click the <strong>Generate Questions</strong> button to start the process.</li>
-                <li>Once the questions are generated, you will see them listed below.</li>
-                <li>You can copy the questions to your clipboard or download them as a file for your reference.</li>
-            </ol>
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1 class="hero-title">Help Center</h1>
+            <p class="hero-subtitle">Everything you need to know about using the AI Question Generator</p>
         </div>
 
-        <div class="help-item">
-            <h3 class="section-title">Supported File Formats</h3>
-            <p>The tool supports the following file formats for uploads:</p>
-            <ul>
-                <li><strong>.txt</strong> - Plain text files.</li>
-                <li><strong>.pdf</strong> - PDF files containing readable text.</li>
-            </ul>
-        </div>
+        <!-- Help Sections -->
+        <div class="help-sections">
+            <!-- Getting Started -->
+            <div class="help-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h2 class="section-title">Getting Started</h2>
+                </div>
+                <div class="help-content">
+                    <p>Welcome to the AI Question Generator! This powerful tool transforms any text into intelligent questions using advanced Natural Language Processing. Follow these simple steps to get started:</p>
+                    <ol>
+                        <li>Enter your text in the input box or upload a document (TXT or PDF format)</li>
+                        <li>Click the <strong>"Generate Questions"</strong> button to start the AI analysis</li>
+                        <li>Wait for the AI to process your content (usually takes 10-30 seconds)</li>
+                        <li>Review the generated questions displayed in organized cards</li>
+                        <li>Use the action buttons to copy, download, or regenerate questions</li>
+                    </ol>
+                </div>
+            </div>
 
-        <div class="help-item">
-            <h3 class="section-title">Text Input</h3>
-            <p>If you choose to input text manually, make sure the content is clear and relevant. The tool will analyze the text and generate appropriate questions based on the context.</p>
-        </div>
+            <!-- File Formats -->
+            <div class="help-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h2 class="section-title">Supported File Formats</h2>
+                </div>
+                <div class="help-content">
+                    <p>Our AI Question Generator supports multiple input methods to give you maximum flexibility:</p>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <i class="fas fa-keyboard"></i>
+                            <h4>Direct Text Input</h4>
+                            <p>Type or paste text directly into the input field. Perfect for quick question generation.</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-file-text"></i>
+                            <h4>TXT Files</h4>
+                            <p>Upload plain text files (.txt) containing your content for processing.</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-file-pdf"></i>
+                            <h4>PDF Documents</h4>
+                            <p>Upload PDF files (.pdf) and we'll extract the text automatically.</p>
+                        </div>
+                    </div>
+                    <p><strong>File Size Limit:</strong> Maximum 10MB per file. For best results, ensure your text is clear, well-formatted, and contains substantial content (minimum 100 characters recommended).</p>
+                </div>
+            </div>
 
-        <div class="help-item">
-            <h3 class="section-title">Error Handling</h3>
-            <p>If there is an error (e.g., unsupported file format, empty input), an error message will appear. Make sure to provide valid input or file format before attempting again.</p>
+            <!-- Features -->
+            <div class="help-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h2 class="section-title">Key Features</h2>
+                </div>
+                <div class="help-content">
+                    <p>Discover the powerful features that make our AI Question Generator stand out:</p>
+                    <ul>
+                        <li><strong>Smart AI Processing:</strong> Uses advanced T5 transformer models for contextual understanding</li>
+                        <li><strong>Quality Filtering:</strong> Automatically removes low-quality, redundant, or nonsensical questions</li>
+                        <li><strong>Multiple Question Types:</strong> Generates comprehension, factual, and analytical questions</li>
+                        <li><strong>Real-time Processing:</strong> Get results in seconds with our optimized algorithms</li>
+                        <li><strong>Export Options:</strong> Copy to clipboard or download as text files</li>
+                        <li><strong>Mobile Friendly:</strong> Works perfectly on all devices and screen sizes</li>
+                        <li><strong>Grammar Validation:</strong> Ensures all questions are grammatically correct</li>
+                        <li><strong>Content Analysis:</strong> Focuses on the most important information in your text</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="help-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h2 class="section-title">Troubleshooting</h2>
+                </div>
+                <div class="help-content">
+                    <p>Encountering issues? Here are solutions to common problems:</p>
+                    <ul>
+                        <li><strong>No questions generated:</strong> Ensure your text has at least 100 characters and contains meaningful content</li>
+                        <li><strong>Upload failed:</strong> Check file format (only .txt and .pdf supported) and size (max 10MB)</li>
+                        <li><strong>Processing timeout:</strong> Try with shorter text or refresh the page and try again</li>
+                        <li><strong>Poor question quality:</strong> Use well-structured, clear text for better results</li>
+                        <li><strong>Copy function not working:</strong> Your browser needs clipboard permissions - check browser settings</li>
+                        <li><strong>Mobile display issues:</strong> Refresh the page or try in landscape mode</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="help-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                </div>
+                <div class="help-content">
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <h4>How many questions can I generate?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>There's no limit! Generate as many questions as you need. The AI typically produces 3-8 high-quality questions per text, depending on content length and complexity.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <h4>Is my data stored or shared?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>No! Your text and generated questions are processed in real-time and not stored on our servers. We respect your privacy and don't share any data with third parties.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <h4>What makes a good text for question generation?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Texts with clear facts, proper names, specific details, and well-structured sentences work best. Avoid overly technical jargon or very short passages for optimal results.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            <h4>Can I use this for commercial purposes?</h4>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes! Teachers, content creators, and businesses can use our tool to create educational materials, assessments, and training content.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Enhanced Footer -->
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 AI Question Generator. <a href="https://www.linkedin.com/in/jaineel-purani-9a128120b/" class="light_text">Connect</a></p>
+        <div class="footer-content">
+            <div class="footer-creator">
+                <h3>Carefully Crafted by Jaineel Purani</h3>
+                <p>AI Developer & Machine Learning Engineer passionate about educational technology.</p>
+            </div>
+
+            <div class="footer-social">
+                <h4>Connect With Me</h4>
+                <div class="footer-social-links">
+                    <a href="https://www.instagram.com/jaineel_purani__555/" target="_blank" class="footer-social-link instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/jaineel-purani-9a128120b/" target="_blank" class="footer-social-link linkedin">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/jaineelpurani" target="_blank" class="footer-social-link github">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-copyright">
+                <p>&copy; 2025 AI Question Generator. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="/credits">Credits</a>
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/feedback">Feedback</a>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't already active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
