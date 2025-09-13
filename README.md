@@ -1,6 +1,15 @@
 # AI Question Generation Web App
 
-This repository contains a Flask-based web application that generates meaningful and contextually relevant questions from a given text input or uploaded file (PDF or TXT) using **T5-based question generation models**. The application uses advanced NLP techniques for improved question quality and relevance.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)  
+[![Flask](https://img.shields.io/badge/Flask-2.3-lightgrey)](https://flask.palletsprojects.com/)  
+[![Transformers](https://img.shields.io/badge/Transformers-Hugging%20Face-orange)](https://huggingface.co/docs/transformers/index)  
+[![NLTK](https://img.shields.io/badge/NLTK-3.8-green)](https://www.nltk.org/)  
+[![SpaCy](https://img.shields.io/badge/SpaCy-3.6-purple)](https://spacy.io/)  
+[![PyPDF2](https://img.shields.io/badge/PyPDF2-3.1-lightblue)](https://pypi.org/project/PyPDF2/)  
+[![Torch](https://img.shields.io/badge/PyTorch-2.1-red)](https://pytorch.org/)  
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)  
+
+This repository hosts a Flask-powered web application that intelligently generates contextually relevant and meaningful questions from any given text or uploaded document (PDF/TXT). Leveraging cutting-edge T5-based question generation models and advanced NLP techniques, the application ensures high-quality, coherent, and accurate questions tailored to the input content.
 
 ---
 
@@ -13,6 +22,7 @@ This repository contains a Flask-based web application that generates meaningful
 - [🤝 Contributing](#-contributing)  
 - [👨‍💻 Author](#-author)  
 - [📜 License](#-license)  
+
 ---
 
 ## 🚀 Features
@@ -129,7 +139,6 @@ Output Filtering: Removes duplicates, irrelevant, or invalid questions.
 - Integration with external APIs for live educational content and question generation.
 
 ---
-
 
 ### Generated Questions:
 
