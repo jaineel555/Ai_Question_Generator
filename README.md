@@ -168,14 +168,23 @@ Contributions are welcome! 🎉
 
 ---
 
+## 🙏 Acknowledgments
+
+- Hugging Face - For providing excellent NLP models
+- spaCy - For advanced NLP capabilities
+- NLTK - For natural language processing tools
+- Open Source Community - For continuous inspiration and support
+
+---
+
 ## 👨‍💻 Author  
 
 **Jaineel Purani**  
 
-📌 [GitHub](https://github.com/jaineel555)  
-📌 [LinkedIn](https://www.linkedin.com/in/jaineel-purani-9a128120b/)  
-📌 [Instagram](https://www.instagram.com/jaineel_purani__555/)  
-📌 [Email](mailto:jaineelpurani555@gmail.com)  
+🐱 [GitHub](https://github.com/jaineel555)  
+💼 [LinkedIn](https://www.linkedin.com/in/jaineel-purani-9a128120b/)  
+📷 [Instagram](https://www.instagram.com/jaineel_purani__555/)  
+📧 [Email](mailto:jaineelpurani555@gmail.com)  
 
 ---
 
